@@ -8,34 +8,47 @@ import {
   NavigationMenuList,
   NavigationMenuTrigger,
   NavigationMenuViewport,
+  navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import Link from "next/link";
 import * as React from "react";
 import Logo from "./Logo";
 
-const components: { title: string; description: string }[] = [
-  { title: "Frozen", description: "Recommended template for most use cases." },
-  { title: "Swift", description: "A template with minimal set of components." },
+const components: { title: string; description: string; href: string }[] = [
+  {
+    title: "Frozen",
+    description: "Recommended template for most use cases.",
+    href: "/frozen",
+  },
+  {
+    title: "Swift",
+    description: "A template with minimal set of components.",
+    href: "/swift",
+  },
   {
     title: "Tuscany",
     description: "Advanced template with more components and features.",
+    href: "/tuscany",
   },
   {
     title: "Amber",
     description: "Great for building a marketing or landing page.",
+    href: "/amber",
   },
   {
     title: "Tide",
     description: "A template for building a blog or a personal website.",
+    href: "/tide",
   },
   {
     title: "Mint",
     description: "A template for building a blog or a personal website.",
+    href: "/mint",
   },
 ];
 
-const Navigation = () => {
+export default function Navigation() {
   return (
     <NavigationMenu>
       <NavigationMenuList>
@@ -60,15 +73,15 @@ const Navigation = () => {
                   </a>
                 </NavigationMenuLink>
               </li>
-              <li title="Introduction">
+              <ListItem href="/docs" title="Introduction">
                 Re-usable components built using Radix UI and Tailwind CSS.
-              </li>
-              <li title="Installation">
+              </ListItem>
+              <ListItem href="/docs/installation" title="Installation">
                 How to install dependencies and structure your app.
-              </li>
-              <li title="Typography">
+              </ListItem>
+              <ListItem href="/docs/primitives/typography" title="Typography">
                 Styles for headings, paragraphs, lists...etc
-              </li>
+              </ListItem>
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
@@ -77,21 +90,51 @@ const Navigation = () => {
           <NavigationMenuContent>
             <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px] ">
               {components.map((component) => (
-                <li key={component.title} title={component.title}>
+                <ListItem
+                  key={component.title}
+                  title={component.title}
+                  href={component.href}
+                >
                   {component.description}
-                </li>
+                </ListItem>
               ))}
             </ul>
           </NavigationMenuContent>
         </NavigationMenuItem>
         <NavigationMenuItem>
           <Link href="/docs" legacyBehavior passHref>
-            <NavigationMenuLink>Documentation</NavigationMenuLink>
+            <NavigationMenuLink className={navigationMenuTriggerStyle()}>
+              Documentation
+            </NavigationMenuLink>
           </Link>
         </NavigationMenuItem>
       </NavigationMenuList>
     </NavigationMenu>
   );
-};
+}
 
-export default Navigation;
+const ListItem = React.forwardRef<
+  React.ElementRef<"a">,
+  React.ComponentPropsWithoutRef<"a">
+>(({ className, title, children, ...props }, ref) => {
+  return (
+    <li>
+      <NavigationMenuLink asChild>
+        <a
+          ref={ref}
+          className={cn(
+            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
+            className
+          )}
+          {...props}
+        >
+          <div className="text-sm font-medium leading-none">{title}</div>
+          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+            {children}
+          </p>
+        </a>
+      </NavigationMenuLink>
+    </li>
+  );
+});
+ListItem.displayName = "ListItem";
