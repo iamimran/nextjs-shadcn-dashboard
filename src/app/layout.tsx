@@ -1,9 +1,9 @@
 import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Outfit } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const outfit = Outfit({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -20,13 +20,12 @@ export default function RootLayout({
       <body
         className={cn(
           "min-h-screen w-full bg-white text-black flex",
-          inter.className,
+          outfit.className,
           {
             "debug-screens": process.env.NODE_ENV === "development",
           }
         )}
       >
-        <p>Sidebar</p>
         <div className="w-full">{children}</div>
       </body>
     </html>
